@@ -9,6 +9,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "nats": "0.8.10"
+        "nats": "0.8.10",
+        "jsonrpc-errors": "git+https://github.com/tec-electronics-lls/jsonrpc-errors.git"
     }
 }

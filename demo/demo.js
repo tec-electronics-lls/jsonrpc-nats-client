@@ -1,6 +1,6 @@
 const JRPCNatsClient = require('../src/jsonrpc-nats-client');
 
-let client = new JRPCNatsClient('nats://192.168.100.3:4222', 'Test');
+let client = new JRPCNatsClient('nats://192.168.100.10:4222', 'test');
 
 client.request('Hello', {
     title: 'Roman'

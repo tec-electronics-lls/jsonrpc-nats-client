@@ -1,25 +1,20 @@
-const NATS = require('nats');
+const NATS = require('nats'),
+    errors = require('jsonrpc-errors');
 
-var JsonRPCNatsClient = function(options, channel, errors) {
+var JsonRPCNatsClient = function(options, channel) {
     if (typeof(options) === 'string') {
-        options.url = options;
+        options = {
+            url: options
+        };
     }
+
     this._channel = channel;
 
     this._nats = NATS.connect(options);
 
-    errors = errors || {};
-
-    this._errors = {
-        SERVER_ERROR: errors.SERVER_ERROR || {
-            code: -32000,
-            message: 'SERVER_ERROR'
-        },
-        PARSE_ERROR: errors.PARSE_ERROR || {
-            code: -32700,
-            message: 'PARSE_ERROR'
-        }
-    }
+    this._nats.on('error', (e)=>{
+        console.log(Object.assign(errors.INTERNAL_ERROR, {data: e.message}));
+    });
 }
 
 JsonRPCNatsClient.prototype.request = function(method, params, callback) {
@@ -42,12 +37,12 @@ JsonRPCNatsClient.prototype.request = function(method, params, callback) {
             content = JSON.parse(content);
         } catch (e) {
             console.log(e);
-            callback(Object.assign({ data: content }, this._errors.PARSE_ERROR));
+            callback(Object.assign(errors.PARSE_ERROR, { data: content }));
             return;
         }
     
         if (!content.jsonrpc || content.jsonrpc !== '2.0') {
-            callback(Object.assign({ data: JSON.stringify(content) }, this._errors.SERVER_ERROR));
+            callback(Object.assign(errors.INVALID_REQUEST, { data: JSON.stringify(content) }));
             return;
         }
     
