@@ -1,7 +1,8 @@
 const NATS = require('nats'),
     errors = require('jsonrpc-errors');
 
-var JsonRPCNatsClient = function(options, channel) {
+var JsonRPCNatsClient = function(options, channel, timeout) {
+    this._timeout = timeout || 1000;
     if (typeof(options) === 'string') {
         options = {
             url: options
@@ -32,7 +33,12 @@ JsonRPCNatsClient.prototype.request = function(method, params, callback) {
         params: params
     }
 
-    this._nats.request(this._channel, JSON.stringify(req), {max: 1}, (content)=>{
+    this._nats.requestOne(this._channel, JSON.stringify(req), {}, this._timeout, (content)=>{
+        if(response instanceof NATS.NatsError && response.code === NATS.REQ_TIMEOUT) {
+            callback(Object.assign(errors.INTERNAL_ERROR, { data: 'Timeout' }));
+            return;
+        }
+        
         try {
             content = JSON.parse(content);
         } catch (e) {
