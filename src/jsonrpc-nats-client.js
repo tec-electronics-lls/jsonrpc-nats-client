@@ -34,7 +34,7 @@ JsonRPCNatsClient.prototype.request = function(method, params, callback) {
     }
 
     this._nats.requestOne(this._channel, JSON.stringify(req), {}, this._timeout, (content)=>{
-        if(response instanceof NATS.NatsError && response.code === NATS.REQ_TIMEOUT) {
+        if(content instanceof NATS.NatsError && content.code === NATS.REQ_TIMEOUT) {
             callback(Object.assign(errors.INTERNAL_ERROR, { data: 'Timeout' }));
             return;
         }
