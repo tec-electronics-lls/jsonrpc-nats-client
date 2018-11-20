@@ -3,19 +3,14 @@ const NATS = require('nats'),
 
 var JsonRPCNatsClient = function(nats, channel) {
     this._nats;
-    if (nats instanceof NATS) {
+    
+    if (typeof(nats) === 'object' && typeof(nats.connectCB) === 'function') {
         this._nats = nats;
-    } else if (typeof(nats) === 'string') {
-        this._nats = NATS.connect({
-            url: {
-                url: options
-            }
-        });
     } else {
         this._nats = NATS.connect(nats)
     }
-
-    this._timeout = options.timeout || 1000;
+    
+    this._timeout = nats.timeout || 1000;
     
     this._channel = channel;
 
