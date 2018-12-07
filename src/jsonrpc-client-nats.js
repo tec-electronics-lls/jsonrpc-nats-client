@@ -1,7 +1,7 @@
 const NATS = require('nats'),
     errors = require('jsonrpc-errors');
 
-var JsonRPCNatsClient = function(nats, channel) {
+var JsonRPCClientNats = function(nats, channel) {
     this._nats;
     
     if (typeof(nats) === 'object' && typeof(nats.connectCB) === 'function') {
@@ -20,7 +20,7 @@ var JsonRPCNatsClient = function(nats, channel) {
     });
 }
 
-JsonRPCNatsClient.prototype.request = function(method, params, callback) {
+JsonRPCClientNats.prototype.request = function(method, params, callback) {
     if (typeof(params) === 'function') {
         callback = params;
         params = {};
@@ -63,4 +63,4 @@ JsonRPCNatsClient.prototype.request = function(method, params, callback) {
     })
 }
 
-module.exports = JsonRPCNatsClient;
+module.exports = JsonRPCClientNats;

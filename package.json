@@ -1,15 +1,14 @@
 {
-    "name": "jsonrpc-nats-client",
+    "name": "jsonrpc-client-nats",
     "version": "1.0.0",
     "description": "",
-    "main": "src/jsonrpc-nats-client.js",
+    "main": "src/jsonrpc-client-nats.js",
     "scripts": {
         "test": "node ./demo/demo.js"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "nats": "0.8.10",
-        "jsonrpc-errors": "git+https://github.com/tec-electronics-lls/jsonrpc-errors.git"
+        "nats": "0.8.10"
     }
 }

@@ -1,21 +1,17 @@
-const JRPCNatsClient = require('../src/jsonrpc-nats-client');
+const JsonRPCClientNats = require('../src/jsonrpc-client-nats');
 
-let client = new JRPCNatsClient('nats://192.168.100.10:4222', 'test');
+let client = new JsonRPCClientNats('nats://127.0.0.1:4222', 'test');
 
-client.request('Hello', {
-    title: 'Roman'
-}, (err, result) => {
+client.request('Ping', (err, result) => {
     console.log(err, result);
 });
 
-client.request('Ping', {
-    title: 'Roman'
-}, (err, result) => {
+client.request('Hello', 'Roman', (err, result) => {
     console.log(err, result);
 });
 
-client.request('Test', {
-    title: 'Roman'
-}, (err, result) => {
+
+
+client.request('ItIsNotWork', (err, result) => {
     console.log(err, result);
 });
